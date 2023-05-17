@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multistore_firebase/Widgets/fake_search.dart';
+import 'package:multistore_firebase/categories/men_categ.dart';
 
 List<ItemsData> items = [
   ItemsData(label: 'men'),
@@ -101,9 +102,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         },
         scrollDirection: Axis.vertical,
         children: const [
-          Center(
-            child: Text('men category '),
-          ),
+          MenCategory(),
           Center(
             child: Text('women category '),
           ),
