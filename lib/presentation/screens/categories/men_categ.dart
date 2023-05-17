@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:multistore_firebase/minor_screens/subcategory_products.dart';
-import 'package:multistore_firebase/utilities/categ_list.dart';
+
+import '../../../core/utilities/categ_list.dart';
+import '../minor_screens/subcategory_products.dart';
 
 // List<String> imagetry = [
 //   'images/try/image0.jpg'

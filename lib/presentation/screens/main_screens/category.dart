@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:multistore_firebase/Widgets/fake_search.dart';
-import 'package:multistore_firebase/categories/men_categ.dart';
+import 'package:multistore_firebase/presentation/components/fake_search.dart';
+
+import '../../../core/models/category_items_data.dart';
+import '../categories/men_categ.dart';
 
 List<ItemsData> items = [
   ItemsData(label: 'men'),
@@ -8,7 +10,7 @@ List<ItemsData> items = [
   ItemsData(label: 'shoes'),
   ItemsData(label: 'bags'),
   ItemsData(label: 'electronics'),
-  ItemsData(label: 'accesories'),
+  ItemsData(label: 'accessories'),
   ItemsData(label: 'home & garden'),
   ItemsData(label: 'kids'),
   ItemsData(label: 'beauty')
@@ -131,10 +133,4 @@ class _CategoryScreenState extends State<CategoryScreen> {
       ),
     );
   }
-}
-
-class ItemsData {
-  String label;
-  bool isSelected;
-  ItemsData({required this.label, this.isSelected = false});
 }
