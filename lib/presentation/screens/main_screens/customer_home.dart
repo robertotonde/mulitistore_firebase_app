@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:multistore_firebase/main_screens/category.dart';
-import 'package:multistore_firebase/main_screens/home.dart';
+
+import 'category.dart';
+import 'home.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
   const CustomerHomeScreen({super.key});
@@ -22,7 +23,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _tabs [_selectedIndex], 
+      body: _tabs[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         elevation: 0,
         type: BottomNavigationBarType.fixed,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:multistore_firebase/main_screens/customer_home.dart';
+import 'package:multistore_firebase/presentation/screens/main_screens/customer_home.dart';
 
 void main() {
   runApp(const MyApp());

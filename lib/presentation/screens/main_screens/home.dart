@@ -1,8 +1,9 @@
 // import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:multistore_firebase/minor_screens/search.dart';
-import 'package:multistore_firebase/Widgets/fake_search.dart';
+import 'package:multistore_firebase/presentation/components/fake_search.dart';
 
+import '../../components/repeatable_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -39,13 +40,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   label: "Bags",
                 ),
                 ReapetedTab(
-                  label: "Elecronics",
+                  label: "Electronics",
                 ),
                 ReapetedTab(
-                  label: "Accesories",
+                  label: "Accessories",
                 ),
                 ReapetedTab(
-                  label: "Home and Grden",
+                  label: "Home and Garden",
                 ),
                 ReapetedTab(
                   label: "Kids",
@@ -61,28 +62,14 @@ class _HomeScreenState extends State<HomeScreen> {
             Center(child: Text("women screen")),
             Center(child: Text("shoes screen")),
             Center(child: Text("Bags screen")),
-            Center(child: Text("Elecronics screen")),
-            Center(child: Text("Accesories screen")),
-            Center(child: Text("Home and Grden screen")),
+            Center(child: Text("Electronics screen")),
+            Center(child: Text("Accessories screen")),
+            Center(child: Text("Home and Garden screen")),
             Center(child: Text("Kids screen")),
             Center(child: Text("Beauty  screen")),
             // Center(child: Text("electonics screen")),
           ],
         ),
-      ),
-    );
-  }
-}
-class ReapetedTab extends StatelessWidget {
-  final String label;
-  const ReapetedTab({super.key, required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Tab(
-      child: Text(
-        label,
-        style: TextStyle(color: Colors.grey.shade600),
       ),
     );
   }
