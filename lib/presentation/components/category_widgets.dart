@@ -24,30 +24,22 @@ class SlideBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                const Text(
-                  ' << ',
-                  style: TextStyle(
-                      color: Colors.brown,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 10),
-                ),
+                mainCategName == 'men'
+                    ? const Text('')
+                    : const Text(
+                        ' << ',
+                        style: style,
+                      ),
                 Text(
                   mainCategName.toUpperCase(),
-                  style: const TextStyle(
-                      color: Colors.brown,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 10),
+                  style: style,
                 ),
-                const Text(
-                  ' >>',
-                  style: TextStyle(
-                      color: Colors.brown,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 10),
-                )
+                mainCategName == 'men'
+                    ? const Text('')
+                    : const Text(
+                        ' >>',
+                        style: style,
+                      )
               ],
             ),
           ),
@@ -56,6 +48,12 @@ class SlideBar extends StatelessWidget {
     );
   }
 }
+
+const style = TextStyle(
+    color: Colors.brown,
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 10);
 
 // ignore: camel_case_types
 class subCategoryModel extends StatelessWidget {
