@@ -16,8 +16,8 @@ import 'package:multistore_firebase/presentation/components/category_widgets.dar
 //   'jacket',
 // ];
 
-class MenCategory extends StatelessWidget {
-  const MenCategory({super.key});
+class BagsCategory extends StatelessWidget {
+  const BagsCategory({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class MenCategory extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const CategHeaderLabel(
-                    headerLabel: 'Men',
+                    headerLabel: 'Bags',
                   ),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.68,
@@ -43,12 +43,12 @@ class MenCategory extends StatelessWidget {
                         mainAxisSpacing: 70,
                         crossAxisSpacing: 15,
                         crossAxisCount: 3,
-                        children: List.generate(men.length, (index) {
+                        children: List.generate(bags.length, (index) {
                           return subCategoryModel(
-                            mainCategName: 'Men',
-                            subCategName: men[index],
-                            assetName: 'images/men/men$index.jpg',
-                            subCategLabel: men[index],
+                            mainCategName: 'Bags',
+                            subCategName: bags[index],
+                            assetName: 'images/bags/bags$index.jpg',
+                            subCategLabel: bags[index],
                           );
                         })),
                   )
@@ -57,7 +57,7 @@ class MenCategory extends StatelessWidget {
             ),
           ),
           //vertical sizized box should display
-      const    Positioned(bottom: 0, right: 0, child: SlideBar(mainCategName: 'men',))
+      const    Positioned(bottom: 0, right: 0, child: SlideBar(mainCategName: 'Bags',))
         ],
       ),
     );
