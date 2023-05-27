@@ -90,7 +90,7 @@ class subCategoryModel extends StatelessWidget {
               image: AssetImage(assetName),
             ),
           ),
-          Text(subCategLabel)
+          Text(subCategLabel,style: const TextStyle(fontSize: 11),)
         ],
       ),
     );
