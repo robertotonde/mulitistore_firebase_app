@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:multistore_firebase/presentation/screens/main_screens/cart.dart';
+import 'package:multistore_firebase/presentation/screens/main_screens/stores.dart';
 
 import 'category.dart';
 import 'home.dart';
@@ -15,9 +17,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   final List<Widget> _tabs = const [
     HomeScreen(),
     CategoryScreen(),
-    Center(child: Text('Category screen')),
-    Center(child: Text('stores screen')),
-    Center(child: Text('Cart screen')),
+    StoresScreen(),
+    CartScreen(),
     Center(child: Text('Profile screen')),
   ];
   @override
