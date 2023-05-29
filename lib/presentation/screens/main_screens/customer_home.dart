@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:multistore_firebase/presentation/screens/main_screens/cart.dart';
+import 'package:multistore_firebase/presentation/screens/main_screens/profile.dart';
 import 'package:multistore_firebase/presentation/screens/main_screens/stores.dart';
 
 import 'category.dart';
@@ -19,7 +20,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     CategoryScreen(),
     StoresScreen(),
     CartScreen(),
-    Center(child: Text('Profile screen')),
+    ProfileScreen()
   ];
   @override
   Widget build(BuildContext context) {
