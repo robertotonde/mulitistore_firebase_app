@@ -11,13 +11,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade300,
       body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
+            centerTitle: true,
             elevation: 0,
-            stretch: true,
-            pinned: true,
             backgroundColor: Colors.white,
             expandedHeight: 140,
             flexibleSpace: LayoutBuilder(
@@ -40,23 +39,116 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return Padding(
-                  padding:
-                      const EdgeInsets.only(top: 20.0, left: 20, right: 20),
-                  child: Center(
-                      child: Container(
-                    height: 100,
-                    decoration: BoxDecoration(
-                      color: Colors.red.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  )),
-                );
-              },
-              childCount: 20,
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                Container(
+                  height: 80,
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Container(
+                        decoration: const BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30))),
+                        child: TextButton(
+                          child: SizedBox(
+                            height: 40,
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            child: const Center(
+                              child: Text(
+                                'Cart',
+                                style: TextStyle(
+                                    color: Colors.yellow, fontSize: 24),
+                              ),
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                      Container(
+                        color: Colors.yellow,
+                        child: TextButton(
+                          child: SizedBox(
+                            height: 40,
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            child: const Center(
+                              child: Text(
+                                'orders',
+                                style: TextStyle(
+                                    color: Colors.black54, fontSize: 24),
+                              ),
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                      Container(
+                        decoration: const BoxDecoration(
+                            color: Colors.black54,
+                            borderRadius: BorderRadius.only(
+                                topRight: Radius.circular(30),
+                                bottomRight: Radius.circular(30))),
+                        child: TextButton(
+                          child: SizedBox(
+                            height: 40,
+                            width: MediaQuery.of(context).size.width * 0.2,
+                            child: const Center(
+                              child: Text(
+                                'Wishlist',
+                                style: TextStyle(
+                                    color: Colors.yellow, fontSize: 20),
+                              ),
+                            ),
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 150,
+                  child: Image(image: AssetImage('images/inapp/logo.jpg')),
+                ),
+                SizedBox(
+                  height: 40,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      SizedBox(
+                        height: 40,
+                        width: 50,
+                        child: Divider(
+                          color: Colors.grey,
+                          thickness: 1,
+                        ),
+                      ),
+                      Text(
+                        '   Account info.  ',
+                        style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 40,
+                        width: 50,
+                        child: Divider(
+                          color: Colors.grey,
+                          thickness: 1,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
             ),
           )
         ],
