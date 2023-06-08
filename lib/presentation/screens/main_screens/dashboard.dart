@@ -33,7 +33,9 @@ class DashboardScreen extends StatelessWidget {
         ),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushReplacementNamed(context, '/welcome_screen');
+              },
               icon: const Icon(
                 Icons.logout,
                 color: Colors.black,

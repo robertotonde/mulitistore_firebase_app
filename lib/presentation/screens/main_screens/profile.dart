@@ -212,7 +212,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   tittle: 'Log Out',
                                   subtittle: '',
                                   icon: Icons.logout,
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.pushReplacementNamed(
+                                  context, '/welcome_screen');
+                                  },
                                 )
                               ],
                             ),

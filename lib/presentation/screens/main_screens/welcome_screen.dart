@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:multistore_firebase/presentation/components/Yellow_button.dart';
+import 'package:multistore_firebase/presentation/screens/main_screens/supplier_home.dart';
 
 const textColors = [
   Colors.yellow,
@@ -137,7 +138,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                             AnimatedLogo(controller: _controller),
                             YellowButton(
                               label: 'Log In',
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pushReplacementNamed(
+                                    context, '/supplier_home');
+                              },
                               width: 0.25,
                             ),
                             Padding(
@@ -173,7 +177,10 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           padding: const EdgeInsets.only(left: 8),
                           child: YellowButton(
                             label: 'Log In',
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushReplacementNamed(
+                                  context, '/customer_home');
+                            },
                             width: 0.25,
                           ),
                         ),
