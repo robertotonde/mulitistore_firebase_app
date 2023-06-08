@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:multistore_firebase/presentation/components/Yellow_button.dart';
 import 'package:multistore_firebase/presentation/components/appbar_widgets.dart';
 import 'package:multistore_firebase/presentation/components/category_widgets.dart';
 import 'package:multistore_firebase/presentation/screens/main_screens/customer_home.dart';
@@ -75,16 +76,10 @@ class _CartScreenState extends State<CartScreen> {
                 ),
               ],
             ),
-            Container(
-              height: 35,
-              width: MediaQuery.of(context).size.width * 0.45,
-              decoration: BoxDecoration(
-                  color: Colors.yellow,
-                  borderRadius: BorderRadius.circular(25)),
-              child: MaterialButton(
-                onPressed: () {},
-                child: const Text('CHECK OUT'),
-              ),
+            YellowButton(
+              width: 0.45,
+              label: 'CHECK OUT ',
+              onPressed: () {},
             )
           ],
         ),
