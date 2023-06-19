@@ -3,10 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:multistore_firebase/presentation/components/auth_widget.dart';
 import 'package:multistore_firebase/presentation/components/snackbar.dart';
-
-// final TextEditingController _nameController = TextEditingController();
-// final TextEditingController _emailController = TextEditingController();
-// final TextEditingController _passwordController = TextEditingController();
+import 'package:image_picker/image_picker.dart';
 
 class CustomerRegister extends StatefulWidget {
   const CustomerRegister({super.key});
@@ -16,7 +13,6 @@ class CustomerRegister extends StatefulWidget {
 }
 
 class _CustomerRegisterState extends State<CustomerRegister> {
- 
   late String name;
   late String email;
   late String password;
@@ -24,6 +20,15 @@ class _CustomerRegisterState extends State<CustomerRegister> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
   bool passwordVisible = false;
+
+  void _pickImageFromCamera() async {
+   final  pickedImage=  await ImagePicker().pickImage(
+        source: ImageSource.camera,
+        maxHeight: 300,
+        maxWidth: 300,
+        imageQuality: 95);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScaffoldMessenger(
@@ -106,7 +111,6 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                           onChanged: (value) {
                             name = value;
                           },
-                          //   controller: _nameController,
                           decoration: texFormDecoration.copyWith(
                               labelText: 'Full Name',
                               hintText: 'Enter your full name '),
@@ -128,7 +132,6 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                           onChanged: (value) {
                             email = value;
                           },
-                          //  controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: texFormDecoration.copyWith(
                               labelText: 'Email Address',
@@ -147,7 +150,6 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                           onChanged: (value) {
                             password = value;
                           },
-                          //  controller: _passwordController,
                           obscureText: passwordVisible,
                           decoration: texFormDecoration.copyWith(
                               suffixIcon: IconButton(
@@ -176,26 +178,13 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             print('valid');
-                            // setState(() {
-                            //   name = _nameController.text;
-                            //   email = _emailController.text;
-                            //   password = _passwordController.text;
-                            // });
+
                             print(name);
                             print(email);
                             print(password);
                           } else {
-                           MyMessageHandler. showSnackBar(_scaffoldKey,'please fill all field');
-                            // ScaffoldMessenger.of(context)
-                            //     .showSnackBar(const SnackBar(
-                            //         duration: Duration(seconds: 2),
-                            //         backgroundColor: Colors.yellow,
-                            //         content: Text(
-                            //           'please fill all fields',
-                            //           textAlign: TextAlign.center,
-                            //           style: TextStyle(
-                            //               fontSize: 18, color: Colors.black),
-                            //         )));
+                            MyMessageHandler.showSnackBar(
+                                _scaffoldKey, 'please fill all field');
                           }
                         },
                       )
@@ -210,5 +199,3 @@ class _CustomerRegisterState extends State<CustomerRegister> {
     );
   }
 }
-
-
