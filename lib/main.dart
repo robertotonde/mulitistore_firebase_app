@@ -5,8 +5,11 @@ import 'package:multistore_firebase/presentation/screens/main_screens/supplier_h
 // import 'package:multistore_firebase/presentation/screens/main_screens/customer_home.dart';
 // import 'package:multistore_firebase/presentation/screens/main_screens/supplier_home.dart';
 import 'package:multistore_firebase/presentation/screens/main_screens/welcome_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -23,8 +26,6 @@ class MyApp extends StatelessWidget {
         '/customer_home': (context) => const CustomerHomeScreen(),
         '/supplier_home': (context) => const SupplierHomeScreen(),
         '/customer_signup': (context) => const CustomerRegister(),
-
-
       },
     );
   }

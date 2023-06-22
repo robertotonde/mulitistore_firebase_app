@@ -1,5 +1,6 @@
-// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers
+// ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multistore_firebase/presentation/components/auth_widget.dart';
 import 'package:multistore_firebase/presentation/components/snackbar.dart';
@@ -62,6 +63,36 @@ class _CustomerRegisterState extends State<CustomerRegister> {
         _pickedImageError = e;
       });
       print(_pickedImageError);
+    }
+  }
+
+  void signUp() async {
+    if (_formKey.currentState!.validate()) {
+      if (_imageFile != null) {
+        try {
+          await FirebaseAuth.instance
+              .createUserWithEmailAndPassword(email: email, password: password);
+          _formKey.currentState!.reset();
+          setState(() {
+            _imageFile = null;
+          });
+          Navigator.pushReplacementNamed(context, '/customer_home');
+        } on FirebaseAuthException catch (e) {
+          if (e.code == 'weak-password') {
+            MyMessageHandler.showSnackBar(
+                _scaffoldKey, 'the password provided is weak');
+            // print('the password provided is weak');
+          } else if (e.code == 'email-already-in-use') {
+            MyMessageHandler.showSnackBar(
+                _scaffoldKey, 'The account already exists for that email.');
+            // print('The account already exists for that email.');
+          }
+        }
+      } else {
+        MyMessageHandler.showSnackBar(_scaffoldKey, 'please pick a photo');
+      }
+    } else {
+      MyMessageHandler.showSnackBar(_scaffoldKey, 'please fill all field');
     }
   }
 
@@ -216,25 +247,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                       AuthMainButton(
                         mainButtonLabel: 'Sign Up',
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            if (_imageFile != null) {
-                              print('image picked');
-                              print('valid');
-                              print(name);
-                              print(email);
-                              print(password);
-                              _formKey.currentState!.reset();
-                              setState(() {
-                                _imageFile = null;
-                              });
-                            } else {
-                              MyMessageHandler.showSnackBar(
-                                  _scaffoldKey, 'please pick a photo');
-                            }
-                          } else {
-                            MyMessageHandler.showSnackBar(
-                                _scaffoldKey, 'please fill all field');
-                          }
+                          signUp();
                         },
                       )
                     ],

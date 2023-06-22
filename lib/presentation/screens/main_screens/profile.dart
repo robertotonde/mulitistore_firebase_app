@@ -1,4 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:multistore_firebase/presentation/components/alert_dialog.dart';
 import 'package:multistore_firebase/presentation/components/appbar_widgets.dart';
 import 'package:multistore_firebase/presentation/screens/customer_screens/customer_orders.dart';
 import 'package:multistore_firebase/presentation/screens/customer_screens/wishlist.dart';
@@ -61,7 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     style: const TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.w600)),
-                              )
+                              ) 
                             ],
                           ),
                         ),
@@ -104,8 +109,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) =>
-                                          const CartScreen(back: AppBarBackButton(),)));
+                                      builder: (context) => const CartScreen(
+                                            back: AppBarBackButton(),
+                                          )));
                             },
                           ),
                         ),
@@ -234,9 +240,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   tittle: 'Log Out',
                                   subtittle: '',
                                   icon: Icons.logout,
-                                  onPressed: () {
-                                    Navigator.pushReplacementNamed(
-                                        context, '/welcome_screen');
+                                  onPressed: () async {
+                                    MyAlertDialog.showMyDialog(
+                                        context: context,
+                                        title: 'Log out',
+                                        content: 'are you sure to log out ',
+                                        tabNo: () {
+                                          Navigator.pop(context);
+                                        },
+                                        tabYes: () async {
+                                          await FirebaseAuth.instance.signOut();
+                                          Navigator.pop(context);
+                                          Navigator.pushReplacementNamed(
+                                              context, '/welcome_screen');
+                                        });
                                   },
                                 )
                               ],
@@ -255,6 +272,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+
+
 
 class YellowDivider extends StatelessWidget {
   const YellowDivider({
