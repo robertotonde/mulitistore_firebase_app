@@ -1,10 +1,12 @@
 // ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers, use_build_context_synchronously
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multistore_firebase/presentation/components/auth_widget.dart';
 import 'package:multistore_firebase/presentation/components/snackbar.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class CustomerRegister extends StatefulWidget {
   const CustomerRegister({super.key});
@@ -17,6 +19,8 @@ class _CustomerRegisterState extends State<CustomerRegister> {
   late String name;
   late String email;
   late String password;
+  late String profileImage;
+  late String _uid;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
@@ -27,6 +31,9 @@ class _CustomerRegisterState extends State<CustomerRegister> {
   // ignore: unused_field
   XFile? _imageFile;
   dynamic _pickedImageError;
+
+  CollectionReference customers =
+      FirebaseFirestore.instance.collection('customers');
 
   void _pickImageFromCamera() async {
     try {
@@ -72,10 +79,28 @@ class _CustomerRegisterState extends State<CustomerRegister> {
         try {
           await FirebaseAuth.instance
               .createUserWithEmailAndPassword(email: email, password: password);
+
+          firebase_storage.Reference ref = firebase_storage
+              .FirebaseStorage.instance
+              .ref('cust-images/$email.jpg');
+          await ref.putFile(File(_imageFile!.path));
+
+          profileImage = await ref.getDownloadURL();
+          _uid = FirebaseAuth.instance.currentUser!.uid;
+         await  customers.doc(_uid).set({
+            'name': name,
+            'email': email,
+            'profileimage': profileImage,
+            'phone': '',
+            'address': '',
+            'cid': _uid
+          });
+
           _formKey.currentState!.reset();
           setState(() {
             _imageFile = null;
           });
+
           Navigator.pushReplacementNamed(context, '/customer_home');
         } on FirebaseAuthException catch (e) {
           if (e.code == 'weak-password') {
