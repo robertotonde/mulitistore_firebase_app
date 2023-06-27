@@ -8,14 +8,14 @@ import 'package:multistore_firebase/presentation/components/snackbar.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
-class CustomerRegister extends StatefulWidget {
-  const CustomerRegister({super.key});
+class CustomerLogin extends StatefulWidget {
+  const CustomerLogin({super.key});
 
   @override
-  State<CustomerRegister> createState() => _CustomerRegisterState();
+  State<CustomerLogin> createState() => _CustomerLoginState();
 }
 
-class _CustomerRegisterState extends State<CustomerRegister> {
+class _CustomerLoginState extends State<CustomerLogin> {
   late String name;
   late String email;
   late String password;
@@ -155,62 +155,7 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                   child: Column(
                     children: [
                       const AuthHeaderLabel(
-                        headerLabel: 'Sign Up',
-                      ),
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 40),
-                            child: CircleAvatar(
-                              radius: 60,
-                              backgroundColor: Colors.purpleAccent,
-                              backgroundImage: _imageFile == null
-                                  ? null
-                                  : FileImage(File(_imageFile!.path)),
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              Container(
-                                decoration: const BoxDecoration(
-                                    color: Colors.purple,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(15),
-                                        topRight: Radius.circular(15))),
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    _pickImageFromCamera();
-                                    // print('pick image from camera');
-                                  },
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 6,
-                              ),
-                              Container(
-                                decoration: const BoxDecoration(
-                                    color: Colors.purple,
-                                    borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(15),
-                                        bottomRight: Radius.circular(15))),
-                                child: IconButton(
-                                  icon: const Icon(
-                                    Icons.photo,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    _pickImageFromGallery();
-                                  },
-                                ),
-                              )
-                            ],
-                          )
-                        ],
+                        headerLabel: 'Log In ',
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -284,7 +229,10 @@ class _CustomerRegisterState extends State<CustomerRegister> {
                       HaveAccount(
                         haveAccount: 'already have account',
                         actionLabel: 'Log In',
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(
+                              context, '/customer_login');
+                        },
                       ),
                       processing == true
                           ? const CircularProgressIndicator()
