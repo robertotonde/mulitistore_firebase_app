@@ -1,12 +1,10 @@
 // ignore_for_file: avoid_print, no_leading_underscores_for_local_identifiers, use_build_context_synchronously
-import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multistore_firebase/presentation/components/auth_widget.dart';
 import 'package:multistore_firebase/presentation/components/snackbar.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class CustomerLogin extends StatefulWidget {
   const CustomerLogin({super.key});
@@ -16,11 +14,9 @@ class CustomerLogin extends StatefulWidget {
 }
 
 class _CustomerLoginState extends State<CustomerLogin> {
-  late String name;
   late String email;
   late String password;
-  late String profileImage;
-  late String _uid;
+
   bool processing = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
@@ -29,106 +25,32 @@ class _CustomerLoginState extends State<CustomerLogin> {
 
   final ImagePicker _picker = ImagePicker();
 
-  // ignore: unused_field
-  XFile? _imageFile;
-  dynamic _pickedImageError;
-
-  CollectionReference customers =
-      FirebaseFirestore.instance.collection('customers');
-
-  void _pickImageFromCamera() async {
-    try {
-      final pickedImage = await _picker.pickImage(
-          source: ImageSource.camera,
-          maxHeight: 300,
-          maxWidth: 300,
-          imageQuality: 95);
-
-      setState(() {
-        _imageFile = pickedImage;
-      });
-    } catch (e) {
-      setState(() {
-        _pickedImageError = e;
-      });
-      print(_pickedImageError);
-    }
-  }
-
-  void _pickImageFromGallery() async {
-    try {
-      final pickedImage = await _picker.pickImage(
-          source: ImageSource.gallery,
-          maxHeight: 300,
-          maxWidth: 300,
-          imageQuality: 95);
-
-      setState(() {
-        _imageFile = pickedImage;
-      });
-    } catch (e) {
-      setState(() {
-        _pickedImageError = e;
-      });
-      print(_pickedImageError);
-    }
-  }
-
-  void signUp() async {
+  void logIn() async {
     setState(() {
       processing = true;
     });
     if (_formKey.currentState!.validate()) {
-      if (_imageFile != null) {
-        try {
-          await FirebaseAuth.instance
-              .createUserWithEmailAndPassword(email: email, password: password);
+      try {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(email: email, password: password);
 
-          firebase_storage.Reference ref = firebase_storage
-              .FirebaseStorage.instance
-              .ref('cust-images/$email.jpg');
-          await ref.putFile(File(_imageFile!.path));
+        _formKey.currentState!.reset();
 
-          profileImage = await ref.getDownloadURL();
-          _uid = FirebaseAuth.instance.currentUser!.uid;
-          await customers.doc(_uid).set({
-            'name': name,
-            'email': email,
-            'profileimage': profileImage,
-            'phone': '',
-            'address': '',
-            'cid': _uid
-          });
-
-          _formKey.currentState!.reset();
+        Navigator.pushReplacementNamed(context, '/customer_home');
+      } on FirebaseAuthException catch (e) {
+        if (e.code == 'user-not-found') {
           setState(() {
-            _imageFile = null;
+            processing = false;
           });
-
-          Navigator.pushReplacementNamed(context, '/customer_home');
-        } on FirebaseAuthException catch (e) {
-          if (e.code == 'weak-password') {
-            setState(() {
-              processing = false;
-            });
-            MyMessageHandler.showSnackBar(
-                _scaffoldKey, 'the password provided is weak');
-            // print('the password provided is weak');
-          } else if (e.code == 'email-already-in-use') {
-            setState(() {
-              processing = false;
-            });
-            MyMessageHandler.showSnackBar(
-                _scaffoldKey, 'The account already exists for that email.');
-            // print('The account already exists for that email.');
-          }
+          MyMessageHandler.showSnackBar(
+              _scaffoldKey, 'No user found for that email.');
+        } else if (e.code == 'wrong-password') {
+          setState(() {
+            processing = false;
+          });
+          MyMessageHandler.showSnackBar(
+              _scaffoldKey, 'wrong password provided for that user.');
         }
-      } else {
-        setState(() {
-          processing = false;
-        });
-
-        MyMessageHandler.showSnackBar(_scaffoldKey, 'please pick a photo');
       }
     } else {
       setState(() {
@@ -153,26 +75,13 @@ class _CustomerLoginState extends State<CustomerLogin> {
                 child: Form(
                   key: _formKey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const AuthHeaderLabel(
                         headerLabel: 'Log In ',
                       ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10),
-                        child: TextFormField(
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'please enter your full name ';
-                            }
-                            return null;
-                          },
-                          onChanged: (value) {
-                            name = value;
-                          },
-                          decoration: texFormDecoration.copyWith(
-                              labelText: 'Full Name',
-                              hintText: 'Enter your full name '),
-                        ),
+                      const SizedBox(
+                        height: 50,
                       ),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -201,7 +110,7 @@ class _CustomerLoginState extends State<CustomerLogin> {
                         child: TextFormField(
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'please enter your password ';
+                              return 'please enter your password? ';
                             }
                             return null;
                           },
@@ -226,20 +135,27 @@ class _CustomerLoginState extends State<CustomerLogin> {
                               hintText: 'Enter your pasword'),
                         ),
                       ),
+                      TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Forget Password',
+                            style: TextStyle(
+                                fontSize: 18, fontStyle: FontStyle.italic),
+                          )),
                       HaveAccount(
-                        haveAccount: 'already have account',
-                        actionLabel: 'Log In',
+                        haveAccount: 'Don\'t have an account? ',
+                        actionLabel: 'Sign Up',
                         onPressed: () {
                           Navigator.pushReplacementNamed(
-                              context, '/customer_login');
+                              context, '/customer_signup');
                         },
                       ),
                       processing == true
-                          ? const CircularProgressIndicator()
+                          ? const Center(child: CircularProgressIndicator())
                           : AuthMainButton(
-                              mainButtonLabel: 'Sign Up',
+                              mainButtonLabel: 'Log In',
                               onPressed: () {
-                                signUp();
+                                logIn();
                               },
                             )
                     ],
