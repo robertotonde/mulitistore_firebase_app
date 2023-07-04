@@ -6,14 +6,14 @@ import 'package:multistore_firebase/presentation/components/auth_widget.dart';
 import 'package:multistore_firebase/presentation/components/snackbar.dart';
 import 'package:image_picker/image_picker.dart';
 
-class CustomerLogin extends StatefulWidget {
-  const CustomerLogin({super.key});
+class SupplierLogin extends StatefulWidget {
+  const SupplierLogin({super.key});
 
   @override
-  State<CustomerLogin> createState() => _CustomerLoginState();
+  State<SupplierLogin> createState() => _SupplierLoginState();
 }
 
-class _CustomerLoginState extends State<CustomerLogin> {
+class _SupplierLoginState extends State<SupplierLogin> {
   late String email;
   late String password;
 
@@ -36,7 +36,7 @@ class _CustomerLoginState extends State<CustomerLogin> {
 
         _formKey.currentState!.reset();
 
-        Navigator.pushReplacementNamed(context, '/customer_home');
+        Navigator.pushReplacementNamed(context, '/supplier_home');
       } on FirebaseAuthException catch (e) {
         if (e.code == 'user-not-found') {
           setState(() {
