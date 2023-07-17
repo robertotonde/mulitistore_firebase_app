@@ -1,11 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:math';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:multistore_firebase/presentation/components/Yellow_button.dart';
-import 'package:multistore_firebase/presentation/screens/main_screens/supplier_home.dart';
+import 'package:multistore_firebase/presentation/screens/main_screens/on_boarding_screen.dart';
 
 const textColors = [
   Colors.yellow,
@@ -184,8 +185,13 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           child: YellowButton(
                             label: 'Log In',
                             onPressed: () {
-                              Navigator.pushReplacementNamed(
-                                  context, '/customer_login');
+                              // Navigator.pushReplacementNamed(
+                              //     context, '/customer_login');
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const OnBoardingScreen()));
                             },
                             width: 0.25,
                           ),
