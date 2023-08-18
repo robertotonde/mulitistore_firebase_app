@@ -23,7 +23,7 @@ class _CustomerLoginState extends State<CustomerLogin> {
       GlobalKey<ScaffoldMessengerState>();
   bool passwordVisible = false;
 
-  final ImagePicker _picker = ImagePicker();
+  // final ImagePicker _picker = ImagePicker();
 
   void logIn() async {
     setState(() {

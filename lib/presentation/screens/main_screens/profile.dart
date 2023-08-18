@@ -77,18 +77,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     const EdgeInsets.only(top: 25, left: 30),
                                 child: Row(
                                   children: [
-                                    CircleAvatar(
-                                        radius: 50,
-                                        backgroundImage:
-                                            NetworkImage(data['profileimage'])),
-
-                                    // const CircleAvatar(
-                                    //     radius: 50,
-                                    //     backgroundImage: AssetImage(
-                                    //         'images/inapp/guest.jpg')),
+                                    data['profileimage'] == ''
+                                        ? const CircleAvatar(
+                                            radius: 50,
+                                            backgroundImage: AssetImage(
+                                                'images/inapp/guest.jpg'))
+                                        : CircleAvatar(
+                                            radius: 50,
+                                            backgroundImage: NetworkImage(
+                                                data['profileimage']),
+                                          ),
                                     Padding(
                                       padding: const EdgeInsets.only(left: 25),
-                                      child: Text(data['name'].toUpperCase(),
+                                      child: Text(
+                                          data['name'] == ''
+                                              ? 'guest'.toUpperCase()
+                                              : data['name'].toUpperCase(),
                                           style: const TextStyle(
                                               fontSize: 24,
                                               fontWeight: FontWeight.w600)),
@@ -222,19 +226,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     children: [
                                       RepeatedListTile(
                                         tittle: 'Email Adress',
-                                        subtittle: data['email'],
+                                        subtittle: data['email'] == ''
+                                            ? 'guest@gmail.com'
+                                            : data['email'],
                                         icon: Icons.email,
                                       ),
                                       const YellowDivider(),
                                       RepeatedListTile(
                                         tittle: 'Phone no',
-                                        subtittle: data['phone'],
+                                        subtittle: data['phone'] == ''
+                                            ? '07XXXXXXX'
+                                            : data['phone'],
                                         icon: Icons.phone,
                                       ),
                                       const YellowDivider(),
                                       RepeatedListTile(
                                         tittle: 'Adress',
-                                        subtittle: data['address'],
+                                        subtittle: data['address'] == ''
+                                            ? 'san andreas'
+                                            : data['address'],
                                         icon: Icons.location_pin,
                                       )
                                     ],

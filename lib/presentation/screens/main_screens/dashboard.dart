@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:multistore_firebase/presentation/components/alert_dialog.dart';
 import 'package:multistore_firebase/presentation/components/appbar_widgets.dart';
 import 'package:multistore_firebase/presentation/screens/dasboard_components/edit_business.dart';
 import 'package:multistore_firebase/presentation/screens/dasboard_components/manage_products.dart';
@@ -49,7 +51,20 @@ class DashboardScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushReplacementNamed(context, '/welcome_screen');
+                MyAlertDialog.showMyDialog(
+                    context: context,
+                    title: 'Log out',
+                    content: 'are you sure to log out ',
+                    tabNo: () {
+                      Navigator.pop(context);
+                    },
+                    tabYes: () async {
+                      await FirebaseAuth.instance.signOut();
+                      Navigator.pop(context);
+                      Navigator.pushReplacementNamed(
+                          context, '/welcome_screen');
+                    });
+                // Navigator.pushReplacementNamed(context, '/welcome_screen');
               },
               icon: const Icon(
                 Icons.logout,

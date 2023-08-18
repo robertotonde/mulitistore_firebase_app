@@ -97,7 +97,8 @@ class _SupplierRegisterState extends State<SupplierRegister> {
             'storelogo': storeLogo,
             'phone': '',
             // 'address': '',
-            'sid': _uid
+            'sid': _uid,
+            'coverimage':'',
           });
 
           _formKey.currentState!.reset();
