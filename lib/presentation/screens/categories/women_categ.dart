@@ -2,20 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:multistore_firebase/core/utilities/categ_list.dart';
 import 'package:multistore_firebase/presentation/components/category_widgets.dart';
 
-
-// List<String> imagetry = [
-//   'images/try/image0.jpg'
-//   'images/try/image1.jpg'
-//   'images/try/image2.jpg'
-//   'images/try/image3.jpg'
-// ];
-// List<String> labeletry = [
-//   'shirt',
-//   'jeans',
-//   'shoes',
-//   'jacket',
-// ];
-
 class WomenCategory extends StatelessWidget {
   const WomenCategory({super.key});
 
@@ -43,12 +29,12 @@ class WomenCategory extends StatelessWidget {
                         mainAxisSpacing: 70,
                         crossAxisSpacing: 15,
                         crossAxisCount: 3,
-                        children: List.generate(women.length, (index) {
+                        children: List.generate(women.length - 1, (index) {
                           return subCategoryModel(
                             mainCategName: 'Women',
-                            subCategName: women[index],
+                            subCategName: women[index + 1],
                             assetName: 'images/women/women$index.jpg',
-                            subCategLabel: women[index],
+                            subCategLabel: women[index + 1],
                           );
                         })),
                   )
@@ -57,10 +43,14 @@ class WomenCategory extends StatelessWidget {
             ),
           ),
           //vertical sizized box should display
-      const    Positioned(bottom: 0, right: 0, child: SlideBar(mainCategName: 'Women',))
+          const Positioned(
+              bottom: 0,
+              right: 0,
+              child: SlideBar(
+                mainCategName: 'Women',
+              ))
         ],
       ),
     );
   }
 }
-

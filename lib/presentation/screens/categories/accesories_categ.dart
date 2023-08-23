@@ -2,20 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:multistore_firebase/core/utilities/categ_list.dart';
 import 'package:multistore_firebase/presentation/components/category_widgets.dart';
 
-
-// List<String> imagetry = [
-//   'images/try/image0.jpg'
-//   'images/try/image1.jpg'
-//   'images/try/image2.jpg'
-//   'images/try/image3.jpg'
-// ];
-// List<String> labeletry = [
-//   'shirt',
-//   'jeans',
-//   'shoes',
-//   'jacket',
-// ];
-
 class AccesoriesCategory extends StatelessWidget {
   const AccesoriesCategory({super.key});
 
@@ -43,12 +29,14 @@ class AccesoriesCategory extends StatelessWidget {
                         mainAxisSpacing: 70,
                         crossAxisSpacing: 15,
                         crossAxisCount: 3,
-                        children: List.generate(accessories.length, (index) {
+                        children:
+                            List.generate(accessories.length - 1, (index) {
                           return subCategoryModel(
                             mainCategName: 'Accesories',
-                            subCategName: accessories[index],
-                            assetName: 'images/accessories/accessories$index.jpg',
-                            subCategLabel: accessories[index],
+                            subCategName: accessories[index + 1],
+                            assetName:
+                                'images/accessories/accessories$index.jpg',
+                            subCategLabel: accessories[index + 1],
                           );
                         })),
                   )
@@ -57,10 +45,14 @@ class AccesoriesCategory extends StatelessWidget {
             ),
           ),
           //vertical sizized box should display
-      const    Positioned(bottom: 0, right: 0, child: SlideBar(mainCategName: 'Accessories',))
+          const Positioned(
+              bottom: 0,
+              right: 0,
+              child: SlideBar(
+                mainCategName: 'Accessories',
+              ))
         ],
       ),
     );
   }
 }
-
