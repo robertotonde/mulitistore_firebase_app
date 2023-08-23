@@ -1,6 +1,8 @@
 # multistore_firebase
 
-A new Flutter project.
+a flutter project that enables suppliers to open an onlie store and display their product ..customers can visit the shops and buy 
+products and get a delivery option .. the app enable customers to pay online via stripe , track their product and rate suppliers 
+customer services.
 
 ## Getting Started
 
