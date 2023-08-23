@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:multistore_firebase/presentation/components/snackbar.dart';
 
 class UploadProductScreen extends StatefulWidget {
   const UploadProductScreen({super.key});
@@ -8,115 +13,254 @@ class UploadProductScreen extends StatefulWidget {
 }
 
 class _UploadProductScreenState extends State<UploadProductScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _scaffoldKey = GlobalKey<FormState>();
+  late double price;
+  late int quantity;
+  late String proName;
+  late String proDesc;
+
+  final ImagePicker _picker = ImagePicker();
+
+  // ignore: unused_field
+  // XFile? _imageFile;
+  List<XFile>? imagesFileList = [];
+  dynamic _pickedImageError;
+
+  // CollectionReference suppliers =
+  //     FirebaseFirestore.instance.collection('suppliers');
+
+  void pickProductImages() async {
+    try {
+      final pickedImage = await _picker.pickMultiImage(
+          // source: ImageSource.camera,
+          maxHeight: 300,
+          maxWidth: 300,
+          imageQuality: 95);
+
+      setState(() {
+        imagesFileList = pickedImage!;
+      });
+    } catch (e) {
+      setState(() {
+        _pickedImageError = e;
+      });
+      print(_pickedImageError);
+    }
+  }
+
+  Widget previewImages() {
+    if (imagesFileList!.isNotEmpty) {
+      return ListView.builder(
+          itemCount: imagesFileList!.length,
+          itemBuilder: (context, index) {
+            return Image.file(File(imagesFileList![index].path));
+          });
+    } else {
+      return const Center(
+        child: Text(
+          'you have not \n \n picked images yet!',
+          textAlign: TextAlign.center,
+          style: TextStyle(fontSize: 16),
+        ),
+      );
+    }
+  }
+
+  void uploadProduct() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      if (imagesFileList!.isNotEmpty) {
+        print('images picked');
+        print('valid');
+        print(price);
+        print(quantity);
+        print(proName);
+        print(proDesc);
+        setState(() {
+          imagesFileList = [];
+        });
+        _formKey.currentState!.reset();
+      } else {
+        MyMessageHandler.showSnackBar(_scaffoldKey, 'pleasea add an image');
+      }
+    } else {
+      MyMessageHandler.showSnackBar(_scaffoldKey, 'pleaee fill all fields');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          reverse: true,
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(children: [
-                Container(
-                  color: Colors.blueGrey.shade100,
-                  height: MediaQuery.of(context).size.width * 0.5,
-                  width: MediaQuery.of(context).size.width * 0.5,
-                  child: const Center(
-                    child: Text(
-                      'you have not \n \n picked images yet!',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
+    return ScaffoldMessenger(
+      key: _scaffoldKey,
+      child: Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            reverse: true,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(children: [
+                    Container(
+                      color: Colors.blueGrey.shade100,
+                      height: MediaQuery.of(context).size.width * 0.5,
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      child: imagesFileList != null
+                          ? previewImages()
+                          : const Center(
+                              child: Text(
+                                'you have not \n \n picked images yet!',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ),
+                    ),
+                  ]),
+                  const SizedBox(
+                    height: 30,
+                    child: Divider(
+                      color: Colors.yellow,
+                      thickness: 1.5,
                     ),
                   ),
-                )
-              ]),
-              const SizedBox(
-                height: 30,
-                child: Divider(
-                  color: Colors.yellow,
-                  thickness: 1.5,
-                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.38,
+                      child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'please enter price';
+                            } else if (value.isValidPrice() != true) {
+                              return 'invalid price';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            price = double.parse(value!);
+                          },
+                          keyboardType: const TextInputType.numberWithOptions(
+                              decimal: true),
+                          decoration: textFormDecoration.copyWith(
+                            labelText: 'price',
+                            hintText: 'price ...\$',
+                          )),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'please enter quantity';
+                            } else if (value.isValidQuantity() != true) {
+                              return "the quantity is not valid";
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            quantity = int.parse(value!);
+                          },
+                          keyboardType: TextInputType.number,
+                          decoration: textFormDecoration.copyWith(
+                            labelText: 'Quantity',
+                            hintText: 'Add Quantity',
+                          )),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'please enter product name';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            proName = value!;
+                          },
+                          maxLength: 100,
+                          maxLines: 3,
+                          decoration: textFormDecoration.copyWith(
+                            labelText: 'Product name',
+                            hintText: 'Enter product name ',
+                          )),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: TextFormField(
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'please enter description';
+                            }
+                            return null;
+                          },
+                          onSaved: (value) {
+                            proDesc = value!;
+                          },
+                          maxLength: 800,
+                          maxLines: 5,
+                          decoration: textFormDecoration.copyWith(
+                            labelText: 'product description',
+                            hintText: 'Enter product description',
+                          )),
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.38,
-                  child: TextFormField(
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      decoration: textFormDecoration.copyWith(
-                        labelText: 'price',
-                        hintText: 'price ...\$',
-                      )),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.45,
-                  child: TextFormField(
-                      keyboardType: TextInputType.number,
-                      decoration: textFormDecoration.copyWith(
-                        labelText: 'Quantity',
-                        hintText: 'Add Quantity',
-                      )),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: TextFormField(
-                      maxLength: 100,
-                      maxLines: 3,
-                      decoration: textFormDecoration.copyWith(
-                        labelText: 'Product name',
-                        hintText: 'Enter product name ',
-                      )),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: TextFormField(
-                      maxLength: 800,
-                      maxLines: 5,
-                      decoration: textFormDecoration.copyWith(
-                        labelText: 'product description',
-                        hintText: 'Enter product description',
-                      )),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 10),
-            child: FloatingActionButton(
-              onPressed: () {},
-              backgroundColor: Colors.yellow,
-              child: const Icon(
-                Icons.photo_library,
-                color: Colors.black,
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 10),
+              child: FloatingActionButton(
+                onPressed: imagesFileList!.isEmpty
+                    ? () {
+                        pickProductImages();
+                      }
+                    : () {
+                        setState(() {
+                          imagesFileList = [];
+                        });
+                      },
+                backgroundColor: Colors.yellow,
+                child: imagesFileList!.isEmpty
+                    ? const Icon(
+                        Icons.photo_library,
+                        color: Colors.black,
+                      )
+                    : const Icon(
+                        Icons.delete_forever,
+                        color: Colors.black,
+                      ),
               ),
             ),
-          ),
-          FloatingActionButton(
-            onPressed: () {},
-            backgroundColor: Colors.yellow,
-            child: const Icon(
-              Icons.upload,
-              color: Colors.black,
-            ),
-          )
-        ],
+            FloatingActionButton(
+              onPressed: () {
+                uploadProduct();
+              },
+              backgroundColor: Colors.yellow,
+              child: const Icon(
+                Icons.upload,
+                color: Colors.black,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
@@ -134,3 +278,16 @@ var textFormDecoration = InputDecoration(
       borderSide: const BorderSide(color: Colors.blueAccent, width: 2),
       borderRadius: BorderRadius.circular(10)),
 );
+
+extension QuantityValidator on String {
+  bool isValidQuantity() {
+    return RegExp(r'^[1-9][0-9]*$').hasMatch(this);
+  }
+}
+
+extension PriceValidator on String {
+  bool isValidPrice() {
+    return RegExp(r'^((([1-9][0-9]*[\.]*)|| ([0][\.]*))([0-9]{1,2}))$')
+        .hasMatch(this);
+  }
+}
