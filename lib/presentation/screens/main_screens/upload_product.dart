@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:multistore_firebase/core/utilities/categ_list.dart';
 import 'package:multistore_firebase/presentation/components/snackbar.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path/path.dart' as path;
+import 'package:uuid/uuid.dart';
 
 class UploadProductScreen extends StatefulWidget {
   const UploadProductScreen({super.key});
@@ -22,9 +24,11 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
   late int quantity;
   late String proName;
   late String proDesc;
+  late String proId;
   String mainCategoryValue = 'select category';
   String subCategValue = 'subcategory';
   List<String> subCategList = [];
+  bool processing = false;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -106,12 +110,15 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     );
   }
 
-  void uploadProduct() async {
+  Future<void> uploadImages() async {
     if (mainCategoryValue != 'select category' &&
         subCategValue != "subcategory") {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
         if (imagesFileList!.isNotEmpty) {
+          setState(() {
+            processing = true;
+          });
           try {
             for (var image in imagesFileList!) {
               firebase_storage.Reference ref = firebase_storage
@@ -126,19 +133,6 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
           } catch (e) {
             print(e);
           }
-
-          print('images picked');
-          print('valid');
-          print(price);
-          print(quantity);
-          print(proName);
-          print(proDesc);
-          setState(() {
-            imagesFileList = [];
-            mainCategoryValue = 'select category';
-            subCategValue = 'subcategory';
-          });
-          _formKey.currentState!.reset();
         } else {
           MyMessageHandler.showSnackBar(_scaffoldKey, 'pleasea add an image');
         }
@@ -148,6 +142,42 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
     } else {
       MyMessageHandler.showSnackBar(_scaffoldKey, 'pleasea select categories');
     }
+  }
+
+  void uploadData() async {
+    if (imagesUrlList!.isNotEmpty) {
+      CollectionReference productRef =
+          FirebaseFirestore.instance.collection('products');
+      proId = const Uuid().v4();
+      await productRef.doc(proId).set({
+        'proid': proId,
+        'maincateg': mainCategoryValue,
+        'subcateg': subCategValue,
+        'price': price,
+        'instock': quantity,
+        'proname': proName,
+        'prodesc': proDesc,
+        'sid': FirebaseAuth.instance.currentUser!.uid,
+        'proimages': imagesUrlList,
+        'discount': 0,
+      }).whenComplete(() {
+        setState(() {
+          processing = false;
+          imagesFileList = [];
+          mainCategoryValue = 'select category';
+
+          subCategList = [];
+          imagesUrlList = [];
+        });
+        _formKey.currentState!.reset();
+      });
+    } else {
+      print('no images');
+    }
+  }
+
+  void uploadProduct() async {
+    await uploadImages().whenComplete(() => uploadData());
   }
 
   @override
@@ -372,14 +402,16 @@ class _UploadProductScreenState extends State<UploadProductScreen> {
               ),
             ),
             FloatingActionButton(
-              onPressed: () {
+              onPressed: processing == true ? null : () {
                 uploadProduct();
               },
               backgroundColor: Colors.yellow,
-              child: const Icon(
-                Icons.upload,
-                color: Colors.black,
-              ),
+              child: processing == true
+                  ? const CircularProgressIndicator(color: Colors.black)
+                  : const Icon(
+                      Icons.upload,
+                      color: Colors.black,
+                    ),
             )
           ],
         ),
