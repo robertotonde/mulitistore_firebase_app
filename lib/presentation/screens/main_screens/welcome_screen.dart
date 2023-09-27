@@ -189,13 +189,13 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                           child: YellowButton(
                             label: 'Log In',
                             onPressed: () {
-                              // Navigator.pushReplacementNamed(
-                              //     context, '/customer_login');
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const OnBoardingScreen()));
+                              Navigator.pushReplacementNamed(
+                                  context, '/customer_login');
+                              // Navigator.push(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //         builder: (context) =>
+                              //             const OnBoardingScreen()));
                             },
                             width: 0.25,
                           ),
